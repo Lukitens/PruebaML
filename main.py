@@ -1,18 +1,18 @@
 # uvicorn main:app --reload
 # http://127.0.0.1:8000/docs Documentacion
+# https://pruebaml-zth8.onrender.com/docs#/ en render
 
 import pandas as pd
 from fastapi import FastAPI
 from sklearn.tree import DecisionTreeClassifier
 from datetime import datetime
 
-df = pd.read_csv("tabla_ml.csv")
-df["Borough"] = df["Borough"].str.lower()
+df = pd.read_parquet("modelo_demanda.parquet")
 
 app = FastAPI()
 
-X = df[["PULocationID", "dia", "mes", "hora"]]
-Y = df["demand"]
+X = df[["PULocationID", "PUDay", "PUMonth", "PUHour"]]
+Y = df["Demand"]
 
 # Inicializar y entrenar el modelo de árbol de decisión para clasificación
 decision_tree_classifier = DecisionTreeClassifier(max_depth=18, min_samples_split=6, min_samples_leaf=4, random_state=123)
@@ -42,6 +42,9 @@ def read_root():
 
 @app.get("/predicciondemanda/{distrito}")
 def prediccion_demanda(distrito : str):
+    """
+    Se introduce el ID del distrito para ver la demanda actual
+    """
     distrito = int(distrito)
     if distrito in df["PULocationID"].values:
         datos_prediccion = {
