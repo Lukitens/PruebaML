@@ -12,6 +12,8 @@ from datetime import datetime
 #Leemos el archivo a usar
 df = pd.read_parquet("modelo_demanda.parquet")
 
+zonas = pd.read_csv("taxi+_zone_lookup (1).csv")
+
 #Iniciamos FastApi en una variable
 app = FastAPI()
 
@@ -61,6 +63,9 @@ def prediccion_demanda(distrito : str):
     distrito = int(distrito)
     #Si el id ingresado sigue con el codigo
     if distrito in df["PULocationID"].values:
+        zona_info = zonas[zonas["LocationID"] == distrito]
+        borough = zona_info["Borough"].values[0]
+        zone = zona_info["Zone"].values[0]
         #Usamos los datos de la fecha actual
         datos_prediccion = {
         "PULocationID": distrito,  # Ejemplo de valores de PULocationID
@@ -74,15 +79,25 @@ def prediccion_demanda(distrito : str):
         #Pasamos la categorización de la demanda a palabra para que el usuario entienda
         # 0 = demanda muy baja, 1 = demanda baja, 2 = demanda normal 3 = alta, 4 = muy alta
         if preds == 0:
-            return("Demanda muy baja")
+            return {"Resultado": f"Demanda muy baja en el distrito {distrito}",
+                    "Borough": borough,
+                    "Zona": zone}
         elif preds == 1:
-            return("Demanda baja")
+            return {"Resultado": f"Demanda baja en el distrito {distrito}",
+                    "Borough": borough,
+                    "Zona": zone}
         elif preds == 2:
-            return("Demanda normal")
+            return {"Resultado": f"Demanda normal en el distrito {distrito}",
+                    "Borough": borough,
+                    "Zona": zone}
         elif preds == 3:
-            return("Demanda alta")
+            return {"Resultado": f"Demanda alta en el distrito {distrito}",
+                    "Borough": borough,
+                    "Zona": zone}
         else:
-            return("Demanda muy alta")
+            return {"Resultado": f"Demanda muy alta en el distrito {distrito}",
+                    "Borough": borough,
+                    "Zona": zone}
     #Si el id ingresado no existe se le avisa al usuario
     else:
-        return ("Tu distrito: {} no existe".format(distrito)) 
+        return ("Tu id de distrito: {} no existe".format(distrito)) 
