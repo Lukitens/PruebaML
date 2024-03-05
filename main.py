@@ -79,24 +79,24 @@ def prediccion_demanda(distrito : str):
         #Pasamos la categorización de la demanda a palabra para que el usuario entienda
         # 0 = demanda muy baja, 1 = demanda baja, 2 = demanda normal 3 = alta, 4 = muy alta
         if preds == 0:
-            return {"Resultado": f"Demanda muy baja en el distrito {distrito}",
-                    "Borough": borough,
+            return {"Resultado": f"Demanda muy baja",
+                    "Distrito": borough,
                     "Zona": zone}
         elif preds == 1:
-            return {"Resultado": f"Demanda baja en el distrito {distrito}",
-                    "Borough": borough,
+            return {"Resultado": f"Demanda baja",
+                    "Distrito": borough,
                     "Zona": zone}
         elif preds == 2:
-            return {"Resultado": f"Demanda normal en el distrito {distrito}",
-                    "Borough": borough,
+            return {"Resultado": f"Demanda normal",
+                    "Distrito": borough,
                     "Zona": zone}
         elif preds == 3:
-            return {"Resultado": f"Demanda alta en el distrito {distrito}",
-                    "Borough": borough,
+            return {"Resultado": f"Demanda alta",
+                    "Distrito": borough,
                     "Zona": zone}
         else:
-            return {"Resultado": f"Demanda muy alta en el distrito {distrito}",
-                    "Borough": borough,
+            return {"Resultado": f"Demanda muy alta",
+                    "Distrito": borough,
                     "Zona": zone}
     #Si el id ingresado no existe se le avisa al usuario
     else:
